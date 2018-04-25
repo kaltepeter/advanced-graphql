@@ -46,7 +46,7 @@ input TasksInput {
 
 input NewTaskInput {
   project: ID!
-  name: ID!
+  name: String!
   type: TaskType!
   dueDate: Float
   status: Status = OPEN
