@@ -1,1 +1,17 @@
 # Just create any Type and query you'd like!
+
+type HelloWorld {
+    message: String!
+}
+
+type Query {
+    helloWorld(message: String): HelloWorld
+}
+
+input NewAnimalInput {
+    name: String!
+}
+
+type Mutation {
+    newAnimal(input: NewAnimalInput): HelloWorld
+}
