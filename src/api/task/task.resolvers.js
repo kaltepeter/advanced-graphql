@@ -38,9 +38,11 @@ const taskResolvers = {
   },
   project(task, args, ctx) {
     // use loader instead
-    return ctx.models.project
-      .findById(task.project)
-      .exec()
+    // return ctx.models.project
+    //   .findById(task.project)
+    //   .exec()
+  return ctx.loaders.project
+          .load(task.project)
   }
 }
 
@@ -69,9 +71,11 @@ module.exports = {
     ...taskResolvers,
     async repo(task, args, ctx) {
       const name = task.repoUrl.split('/').pop()
+        console.log("DetTask, ", name)
       // use loader instead
       const repos = await reposForOrg()
-      const repo = repos.find(r => r.name === name)
+      // const repo = repos.find(r => r.name === name)
+        const repo = ctx.loaders.repo.load(name)
       return {
         name: repo.name,
         description: repo.description,

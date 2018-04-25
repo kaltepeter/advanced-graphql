@@ -8,10 +8,12 @@ if (process.env.NODE_ENV !== 'testing') {
 }
 
 const reposForOrg = () => {
+  console.log('get repos')
   return octokit.repos.getForOrg({
     org: 'tipeio',
     type: 'public'
   }).then(({data}) => {
+    console.log('github data: ', data)
     return data
   })
 }

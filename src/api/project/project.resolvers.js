@@ -1,7 +1,6 @@
 const project = async (_, args, ctx, info) => {
-  const project = await ctx.models.project
-    .findById(args.input.id)
-    .exec()
+  const project = await ctx.loaders.project
+    .load(args.input.id)
 
   if (!project) {
     throw new Error('Project does not exist')
@@ -36,6 +35,7 @@ module.exports = {
         project: project._id
       })
         .exec()
+      //   return ctx.loaders.taskByProject.load(project._id)
     }
   }
 }
