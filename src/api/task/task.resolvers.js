@@ -1,10 +1,11 @@
+const {reposForOrg} = require('../github')
+
 const task = (_, args, ctx) => {
   const {id: _id, name, project} = args.input
 
   if (!_id && !name) {
     throw new Error('Invalid input')
   }
-
   return ctx.loaders.task.load(_id)
 }
 const tasks = (_, args, ctx) => {
@@ -35,7 +36,9 @@ const taskResolvers = {
     return task._id + ''
   },
   project(task, args, ctx) {
-    return ctx.loaders.project.load(task.project)
+    return ctx.models.project
+      .findById(task.project)
+      .exec()
   }
 }
 
@@ -52,19 +55,21 @@ module.exports = {
   },
   Task: {
     __resolveType(task) {
-      switch (task.type) {
-        case 'dev':
-          return 'DevTask'
-        case 'design':
-          return 'DesignTask'
-      }
+      /*
+        Resolve the Task interface
+        what is the difference between a DevTask and DesignTask?
+        is there a field on the task model that you can check?
+        A value?
+      */
     }
   },
   DevTask: {
     ...taskResolvers,
     async repo(task, args, ctx) {
       const name = task.repoUrl.split('/').pop()
-      const repo = await ctx.loaders.repo.load(name)
+
+      const repos = await reposForOrg()
+      const repo = repos.find(r => r.name === name)
       return {
         name: repo.name,
         description: repo.description,
