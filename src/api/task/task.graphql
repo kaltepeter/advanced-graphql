@@ -1,13 +1,13 @@
 enum Status {
-  OPEN
-  IN_PROGRESS
-  REVIEWING
-  DONE
+    OPEN
+    IN_PROGRESS
+    REVIEWING
+    DONE
 }
 
 enum TaskType {
-  design
-  dev
+    design
+    dev
 }
 
 # Right now, this is a type. But there are two Types of Tasks
@@ -16,67 +16,96 @@ enum TaskType {
 # and create two new type (DevTask, DesignTask) that implement the
 # Task interface
 # don't forget to add the correct fields to the correct Type 💯
-type Task {
-  id: ID!
-  name: String!
-  project: Project!
-  status: Status!
-  description: String
-  tasks: [Task]!
-  parentTask: Task
-  type: TaskType!
-  dueDate: Float
-  createdAt: String!
-  updatedAt: String!
-  # devTask specific field
-  repo: Repo!
-  # designTask specific task
-  assetUrl: String!
+
+interface Task {
+    id: ID!
+    name: String!
+    project: Project!
+    status: Status!
+    description: String
+    tasks: [Task]!
+    parentTask: Task
+    type: TaskType!
+    dueDate: Float
+    createdAt: String!
+    updatedAt: String!
+}
+
+type DevTask implements Task {
+    id: ID!
+    name: String!
+    project: Project!
+    status: Status!
+    description: String
+    tasks: [Task]!
+    parentTask: Task
+    type: TaskType!
+    dueDate: Float
+    createdAt: String!
+    updatedAt: String!
+    # devTask specific field
+    repo: Repo!
+}
+
+type DesignTask implements Task {
+    id: ID!
+    name: String!
+    project: Project!
+    status: Status!
+    description: String
+    tasks: [Task]!
+    parentTask: Task
+    type: TaskType!
+    dueDate: Float
+    createdAt: String!
+    updatedAt: String!
+    # designTask specific task
+    assetUrl: String!
 }
 
 type Repo {
-  name: String!
-  issueCount: Int!
-  description: String
-  url: String!
+    name: String!
+    issueCount: Int!
+    description: String
+    url: String!
 }
 
 input ChangeStatusInput {
-  id: ID!
-  status: Status!
+    id: ID!
+    status: Status!
 }
 
 input TasksInput {
-  type: TaskType
-  status: Status
-  project: ID!
+    type: TaskType
+    status: Status
+    project: ID!
 }
 
 input NewTaskInput {
-  project: ID!
-  name: ID!
-  type: TaskType!
-  dueDate: Float
-  status: Status = OPEN
-  description: String
-  parentTask: ID
-  repoUrl: String
-  assetUrl: String
+    project: ID!
+    name: ID!
+    type: TaskType!
+    dueDate: Float
+    status: Status = OPEN
+    description: String
+    parentTask: ID
+    repoUrl: String
+    assetUrl: String
 }
 
 input TaskInput {
-  project: ID!
-  id: ID
-  name: String
+    project: ID!
+    id: ID
+    name: String
 }
 
 extend type Query {
-  task(input: TaskInput!): Task!
-  tasks(input: TasksInput!): [Task]!
+    task(input: TaskInput!): Task!
+    tasks(input: TasksInput!): [Task]!
 }
 
 extend type Mutation {
-  newTask(input: NewTaskInput!): Task!
-  changeStatus(input: ChangeStatusInput!): Task!
-  removeTask(id: ID!): Task!
+    newTask(input: NewTaskInput!): Task!
+    changeStatus(input: ChangeStatusInput!): Task!
+    removeTask(id: ID!): Task!
 }

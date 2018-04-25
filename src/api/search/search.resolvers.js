@@ -19,6 +19,15 @@ module.exports = {
         Think about the differences between a Project and a Task
         Then the difference between a DevTask and A DesignTask
       */
+      if (searchResult.type) {
+        if (searchResult.type === 'dev') {
+          return 'DevTask'
+        } else {
+          return 'DesignTask'
+        }
+      } else {
+        return 'Project'
+      }
     }
   }
 }

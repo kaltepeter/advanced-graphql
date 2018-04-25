@@ -61,6 +61,11 @@ module.exports = {
         is there a field on the task model that you can check?
         A value?
       */
+      if (task.type === 'dev') {
+        return 'DevTask'
+      } else {
+        return 'DesignTask'
+      }
     }
   },
   DevTask: {
